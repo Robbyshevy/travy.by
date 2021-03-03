@@ -1,0 +1,373 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+	    <button onclick="$('#input-apply').attr('value', '1'); $('#' + $('#form-callback').attr('id')).submit();" data-toggle="tooltip" title="{{ button_apply }}" class="btn btn-success"><i class="fa fa-save"></i></button>
+        <button type="submit" form="form-category" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+	{% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+		<ul class="nav nav-tabs">
+		  <li class="active"><a href="#tab-callback" data-toggle="tab">{{ tab_callback }}</a></li>
+		  <li><a href="#tab-setting" data-toggle="tab">{{ tab_setting }}</a></li>
+	    </ul>
+	    <div class="tab-content">
+		  <div class="tab-pane active" id="tab-callback">
+			<div class="row">
+			  <div class="panel-body">
+			    <div class="pull-right">
+				  <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-callback-delete').submit() : false;"><i class="fa fa-trash-o"></i> {{ button_delete }}</button>
+			    </div>
+			  </div>
+		    </div>
+		    <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-callback-delete">
+			  <div class="table-responsive">
+				<table class="table table-bordered table-hover">
+				  <thead>
+					<tr>
+				  <td width="1" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+				  <td class="text-left">{% if sort == 'title' %}
+                    <a href="{{ sort_title }}" class="{{ order|lower }}">{{ column_title }}</a>
+                    {% else %}
+                    <a href="{{ sort_title }}">{{ column_title }}</a>
+                    {% endif %}</td>	
+				  <td class="text-left">{% if sort == 'name' %}
+                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                    {% else %}
+                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                    {% endif %}</td>	
+				  <td class="text-left">{% if sort == 'email' %}
+                    <a href="{{ sort_email }}" class="{{ order|lower }}">{{ column_email }}</a>
+                    {% else %}
+                    <a href="{{ sort_email }}">{{ column_email }}</a>
+                    {% endif %}</td>	
+				  <td class="text-left">{% if sort == 'time' %}
+                    <a href="{{ sort_time }}" class="{{ order|lower }}">{{ column_time }}</a>
+                    {% else %}
+                    <a href="{{ sort_time }}">{{ column_time }}</a>
+                    {% endif %}</td>	
+				  <td class="text-left">{% if sort == 'phone' %}
+                    <a href="{{ sort_phone }}" class="{{ order|lower }}">{{ column_phone }}</a>
+                    {% else %}
+                    <a href="{{ sort_phone }}">{{ column_phone }}</a>
+                    {% endif %}</td>					
+				  <td class="text-left">{% if sort == 'text' %}
+                    <a href="{{ sort_text }}" class="{{ order|lower }}">{{ column_text }}</a>
+                    {% else %}
+                    <a href="{{ sort_text }}">{{ column_text }}</a>
+                    {% endif %}</td>
+				  <td class="text-left">{{ column_url }}</td>
+                  <td class="text-left">{% if sort == 'date_added' %}
+                    <a href="{{ sort_date_added }}" class="{{ order|lower }}">{{ column_date_added }}</a>
+                    {% else %}
+                    <a href="{{ sort_date_added }}">{{ column_date_added }}</a>
+                    {% endif %}</td>
+                </tr>
+				  </thead>
+				  <tbody>
+					{% if callbacks %}
+					{% for callback in callbacks %}
+					<tr>
+					  <td class="text-center">{% if callback.callback_id in selected %}
+						<input type="checkbox" name="selected[]" value="{{ callback.callback_id }}" checked="checked" />
+						{% else %}
+						<input type="checkbox" name="selected[]" value="{{ callback.callback_id }}" />
+						{% endif %}</td>
+					  <td class="text-left">{{ callback.title }}</td>
+					  <td class="text-left">{{ callback.name }}</td>
+					  <td class="text-left">{{ callback.email }}</td>
+					  <td class="text-left">{{ callback.time }}</td>
+					  <td class="text-left">{{ callback.phone }}</td>
+					  <td class="text-left">{{ callback.text }}</td>
+					  <td class="text-left">{{ callback.url }}</td>
+					  <td class="text-left">{{ callback.date_added }}</td>
+					</tr>
+					{% endfor %}
+					{% else %}
+					<tr>
+					  <td class="text-center" colspan="9">{{ text_no_results }}</td>
+					</tr>
+					{% endif %}
+				  </tbody>
+				</table>
+			  </div>
+			</form>
+			<div class="row">
+			  <div class="col-sm-6 text-left">{{ pagination }}</div>
+			  <div class="col-sm-6 text-right">{{ results }}</div>
+			</div>
+		  </div>
+		  <div class="tab-pane" id="tab-setting">
+		    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-callback" class="form-horizontal">
+		      <input type="hidden" name="apply" id="input-apply" value="0" />
+		      <div class="row">
+				<div class="col-sm-2">
+				  <ul class="nav nav-pills nav-stacked">
+			        <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+				    <li><a href="#tab-form" data-toggle="tab">{{ tab_form }}</a></li>
+				    <li><a href="#tab-button" data-toggle="tab">{{ tab_button }}</a></li>
+				    <li><a href="#tab-sms" data-toggle="tab">{{ tab_sms }}</a></li>
+			      </ul>
+			    </div>
+				<div class="col-sm-10">
+				  <div class="tab-content">
+			        <div class="tab-pane active" id="tab-general">
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_status" id="input-status" class="form-control">
+						    {% if module_callback_status %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+					      </select>
+					    </div>
+				      </div>
+					  <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-link">{{ entry_link }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_link" id="input-link" class="form-control">
+						    {% if module_callback_link %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+					      </select>
+					    </div>
+				      </div>
+				    </div>
+				    <div class="tab-pane" id="tab-form">
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_title" id="input-title" class="form-control">
+						    <option value="2" {% if module_callback_title == '2'%} selected="selected" {% endif %}>{{ text_required }}</option>
+						    <option value="1" {% if module_callback_title == '1'%} selected="selected" {% endif %}>{{ text_no_required }}</option>
+						    <option value="0" {% if module_callback_title == '0'%} selected="selected" {% endif %}>{{ text_disabled }}</option>
+					      </select>
+					    </div>
+				      </div>
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_name" id="input-name" class="form-control">
+						    <option value="2" {% if module_callback_name == '2'%} selected="selected" {% endif %}>{{ text_required }}</option>
+						    <option value="1" {% if module_callback_name == '1'%} selected="selected" {% endif %}>{{ text_no_required }}</option>
+						    <option value="0" {% if module_callback_name == '0'%} selected="selected" {% endif %}>{{ text_disabled }}</option>
+					      </select>
+					    </div>
+				      </div>
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-time">{{ entry_time }}</label>
+					    <div class="col-sm-10">
+					      <div class="row">
+					        <div class="col-sm-6">
+						      <select name="module_callback_time_required" id="input-time" class="form-control">
+						        <option value="2" {% if module_callback_time_required == '2'%} selected="selected" {% endif %}>{{ text_required }}</option>
+						        <option value="1" {% if module_callback_time_required == '1'%} selected="selected" {% endif %}>{{ text_no_required }}</option>
+						        <option value="0" {% if module_callback_time_required == '0'%} selected="selected" {% endif %}>{{ text_disabled }}</option>
+						      </select>
+					        </div>
+					        <div class="col-sm-6">
+						      <input type="text" name="module_callback_time" value="{{ module_callback_time }}" placeholder="{{ entry_time }}" id="input-time" class="form-control" />
+					        </div>
+					      </div>
+					    </div>
+				      </div>
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-phone">{{ entry_phone }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_phone" id="input-phone" class="form-control">
+						    <option value="2" {% if module_callback_phone == '2'%} selected="selected" {% endif %}>{{ text_required }}</option>
+						    <option value="1" {% if module_callback_phone == '1'%} selected="selected" {% endif %}>{{ text_no_required }}</option>
+						    <option value="0" {% if module_callback_phone == '0'%} selected="selected" {% endif %}>{{ text_disabled }}</option>
+					      </select>
+					    </div>
+				      </div>
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_email" id="input-email" class="form-control">
+						    <option value="2" {% if module_callback_email == '2'%} selected="selected" {% endif %}>{{ text_required }}</option>
+						    <option value="1" {% if module_callback_email == '1'%} selected="selected" {% endif %}>{{ text_no_required }}</option>
+						    <option value="0" {% if module_callback_email == '0'%} selected="selected" {% endif %}>{{ text_disabled }}</option>
+					      </select>
+					    </div>
+				      </div>
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-text">{{ entry_text }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_text" id="input-text" class="form-control">
+						    <option value="2" {% if module_callback_text == '2'%} selected="selected" {% endif %}>{{ text_required }}</option>
+						    <option value="1" {% if module_callback_text == '1'%} selected="selected" {% endif %}>{{ text_no_required }}</option>
+						    <option value="0" {% if module_callback_text == '0'%} selected="selected" {% endif %}>{{ text_disabled }}</option>
+					      </select>
+					    </div>
+				      </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label" for="input-captcha">{{ entry_captcha }}</label>
+						<div class="col-sm-10">
+						  <select name="module_callback_captcha" id="input-captcha" class="form-control">
+							{% if module_callback_captcha %}
+							<option value="1" selected="selected">{{ text_enabled }}</option>
+							<option value="0">{{ text_disabled }}</option>
+							{% else %}
+							<option value="1">{{ text_enabled }}</option>
+							<option value="0" selected="selected">{{ text_disabled }}</option>
+							{% endif %}
+						  </select>
+						</div>
+					  </div>
+				    </div>
+				    <div class="tab-pane" id="tab-button">
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-button">{{ entry_button }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_button" id="input-button" class="form-control">
+						    {% if module_callback_button %}
+						    <option value="1" selected="selected">{{ text_enabled }}</option>
+						    <option value="0">{{ text_disabled }}</option>
+						    {% else %}
+						    <option value="1">{{ text_enabled }}</option>
+						    <option value="0" selected="selected">{{ text_disabled }}</option>
+						    {% endif %}
+					      </select>
+					    </div>
+				      </div>
+				      <div class="form-group">
+					    <label class="col-sm-2 control-label" for="input-position">{{ entry_position }}</label>
+					    <div class="col-sm-10">
+					      <select name="module_callback_position" id="input-position" class="form-control">
+						    {% if module_callback_position == "right" %}
+							<option value="right" selected="selected">{{ text_right }}</option>
+							<option value="left">{{ text_left }}</option>
+							{% else %}
+							<option value="right">{{ text_right }}</option>
+							<option value="left" selected="selected">{{ text_left }}</option>
+							{% endif %}
+						  </select>
+					    </div>
+					  </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label" for="input-type">{{ entry_type }}</label>
+						<div class="col-sm-10">
+						  <select name="module_callback_type" id="input-type" class="form-control">
+							{% if module_callback_type == 2 %}
+							<option value="2" selected="selected">{{ text_field }}</option>
+							<option value="1">{{ text_button }}</option>
+							<option value="0">{{ text_image }}</option>
+							{% elseif module_callback_type == 1 %}
+							<option value="2">{{ text_field }}</option>
+							<option value="1" selected="selected">{{ text_button }}</option>
+							<option value="0">{{ text_image }}</option>
+							{% else %}
+							<option value="2">{{ text_field }}</option>
+							<option value="1">{{ text_button }}</option>
+							<option value="0" selected="selected">{{ text_image }}</option>
+							{% endif %}
+						  </select>
+						</div>
+					  </div>
+					  <div id="color-type" class="form-group"{% if not module_callback_type %} style="display: none;"{% endif %}>
+						<label class="col-sm-2 control-label" for="input-color-top">{{ entry_button_color }}</label>
+						<div class="col-sm-5">
+						  <input type="text" name="module_callback_color_top" value="{{ module_callback_color_top }}" placeholder="{{ entry_button_color }}" id="input-color-top" class="form-control" />
+						</div>
+						<div class="col-sm-5">
+						  <input type="text" name="module_callback_color_bottom" value="{{ module_callback_color_bottom }}" placeholder="{{ entry_button_color }}" id="input-color-bottom" class="form-control" />
+						</div>
+					  </div>
+					  <div id="image-type" class="form-group"{% if module_callback_type %} style="display: none;"{% endif %}>
+						<label class="col-sm-2 control-label" for="thumb-image">{{ entry_image }}</label>
+						<div class="col-sm-2">
+						  <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ module_callback_thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="module_callback_image" value="{{ module_callback_image }}" id="input-image" />
+						</div>
+						<div class="col-sm-4">
+						  <input type="text" name="module_callback_image_width" value="{{ module_callback_image_width }}" placeholder="{{ entry_width }}" id="input-image-width" class="form-control" />
+						</div>
+						<div class="col-sm-4">
+						  <input type="text" name="module_callback_image_height" value="{{ module_callback_image_height }}" placeholder="{{ entry_height }}" id="input-image-height" class="form-control" />
+						</div>
+					  </div>
+				    </div>
+				    <div class="tab-pane" id="tab-sms">
+				      <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_smsru }}</div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label" for="input-sms-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+						  <select name="module_callback_sms_status" id="input-sms-status" class="form-control">
+							{% if module_callback_sms_status %}
+							<option value="1" selected="selected">{{ text_enabled }}</option>
+							<option value="0">{{ text_disabled }}</option>
+							{% else %}
+							<option value="1">{{ text_enabled }}</option>
+							<option value="0" selected="selected">{{ text_disabled }}</option>
+							{% endif %}
+						  </select>
+						</div>
+					  </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label" for="input-api-key">{{ entry_api_key }}</label>
+						<div class="col-sm-10">
+						  <input type="text" name="module_callback_api_key" value="{{ module_callback_api_key }}" placeholder="{{ entry_api_key }}" id="input-api-key" class="form-control" />
+						</div>
+					  </div>
+					  <div class="form-group">
+						<label class="col-sm-2 control-label" for="input-sender">{{ entry_sender }}</label>
+						<div class="col-sm-10">
+						  <input type="text" name="module_callback_sender" value="{{ module_callback_sender }}" placeholder="{{ entry_sender }}" id="input-sender" class="form-control" />
+						</div>
+					  </div>
+				    </div>
+			      </div>
+				</div>
+		      </div>
+			</form>
+		  </div>
+		</div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+  $(document).ready(function() {
+	  $("#input-type").on("change", function() {
+		  if ($("#input-type").val() == 0) {
+			  $("#color-type").hide();
+			  $("#image-type").show();
+		  } else {
+			  $("#color-type").show();
+			  $("#image-type").hide();
+		  }
+	  });
+  });
+  //--></script>
+</div>
+{{ footer }}

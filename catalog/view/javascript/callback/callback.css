@@ -1,0 +1,87 @@
+/* Button Simple */
+
+.callback-simple {
+	width: 250px;
+	height: 36px;
+	position: fixed;
+	bottom: 5px;
+	z-index: 100;
+	transition: all 0s ease-out;
+	display: block;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
+	padding: 8px 0px 0 0px;
+	cursor: pointer;
+	border: none;
+	border-radius: 4px;
+}
+
+/* Button Field */
+
+.callback-right {
+	right: 5px;
+}
+
+.callback-left {
+	left: 5px;
+}
+
+.callback-field {
+	width: 310px;
+	height: 44px;
+	position: fixed;
+	bottom: 5px;
+	z-index: 100;
+	transition: all 0s ease-out;
+	display: block;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
+	text-shadow: 0px -1px 0px rgba(0,0,0,0.4);
+	padding: 5px;
+	cursor: pointer;
+	border: none;
+	border-radius: 4px;
+}
+
+#callback-field-alert {
+	position: fixed;
+	bottom: 60px;
+	width: 310px;
+	z-index: 100;
+}
+
+.callback-field .input-group{
+	width: 200px;
+	float:right;
+}
+.callback-field label {
+	float:left;
+	margin-top: 8px;
+}
+
+.callback-image {
+	position: fixed;
+	bottom: 20px;
+	z-index: 100;
+	display: block;
+	cursor: pointer;
+	border: none;
+}
+
+.callback-image-right {
+	right: 20px;
+}
+
+.callback-image-left {
+	left: 20px;
+}
+
+.show-callback {
+	cursor: pointer;
+}
